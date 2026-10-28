@@ -16,6 +16,16 @@
       "queryName": "Query1_DataDestination",
       "isHidden": true,
       "loadEnabled": false
+    },
+    "stg_monthly": {
+      "queryId": "74687b42-b436-48f3-ae1a-f9262b6a43fe",
+      "queryName": "stg_monthly"
+    },
+    "stg_monthly_DataDestination": {
+      "queryId": "fa06fc62-0cff-4b29-9096-47b3e6adb5b3",
+      "queryName": "stg_monthly_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
     }
   },
   "connections": [
@@ -28,6 +38,11 @@
       "path": "Warehouse",
       "kind": "Warehouse",
       "connectionId": "{\"ClusterId\":\"87b5c487-c6c0-4478-86c2-a59e26ea5881\",\"DatasourceId\":\"676e2841-8bc0-48b1-8e3d-4343653434ba\"}"
+    },
+    {
+      "path": "https://files.ember-energy.org/public-downloads/generation/outputs/release_generation_monthly_global.csv",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"87b5c487-c6c0-4478-86c2-a59e26ea5881\",\"DatasourceId\":\"0ed26128-5fae-4f34-88be-2b49a16eaca2\"}"
     }
   ]
 }
