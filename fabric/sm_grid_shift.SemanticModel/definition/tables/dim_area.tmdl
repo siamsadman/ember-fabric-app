@@ -1,0 +1,116 @@
+table dim_area
+	lineageTag: c45a52f1-b898-45c4-8fcd-f12bbbe60c5b
+	sourceLineageTag: [mart].[dim_area]
+
+	column area_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2535a29c-e6bc-4d6b-bcdf-d35587b7f52f
+		sourceLineageTag: area_key
+		summarizeBy: none
+		sourceColumn: area_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column area_name
+		dataType: string
+		lineageTag: c2f29888-2d88-4a1c-8baf-fbbd3ca64188
+		sourceLineageTag: area_name
+		summarizeBy: none
+		sourceColumn: area_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column iso3
+		dataType: string
+		lineageTag: b1944d4d-26d9-473b-be43-9106440b434e
+		sourceLineageTag: iso3
+		summarizeBy: none
+		sourceColumn: iso3
+
+		annotation SummarizationSetBy = Automatic
+
+	column area_type
+		dataType: string
+		lineageTag: 68792244-95d7-4a32-8c2c-cbbe8d1a9883
+		sourceLineageTag: area_type
+		summarizeBy: none
+		sourceColumn: area_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column continent
+		dataType: string
+		lineageTag: 980befcd-13d0-40a4-b83b-adece9364517
+		sourceLineageTag: continent
+		summarizeBy: none
+		sourceColumn: continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column ember_region
+		dataType: string
+		lineageTag: 3540a625-41de-4af2-9961-b5f851c9532b
+		sourceLineageTag: ember_region
+		summarizeBy: none
+		sourceColumn: ember_region
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_g20
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: dba023c3-2697-409b-922f-aa6c405fe9c2
+		sourceLineageTag: is_g20
+		summarizeBy: none
+		sourceColumn: is_g20
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_oecd
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4a98acb6-106f-4824-914d-7f8727496015
+		sourceLineageTag: is_oecd
+		summarizeBy: none
+		sourceColumn: is_oecd
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_asean
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 54ebfd7f-ed6e-46b1-bdab-901ebf037d0b
+		sourceLineageTag: is_asean
+		summarizeBy: none
+		sourceColumn: is_asean
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_south_asia_peer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 44e86b2e-d06f-47b0-9011-b10c3f1b7572
+		sourceLineageTag: is_south_asia_peer
+		summarizeBy: none
+		sourceColumn: is_south_asia_peer
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_focus_country
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d1ed40b0-0d03-4c99-b471-9e8a0eba4f6b
+		sourceLineageTag: is_focus_country
+		summarizeBy: none
+		sourceColumn: is_focus_country
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_area = entity
+		mode: directLake
+		source
+			entityName: dim_area
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+

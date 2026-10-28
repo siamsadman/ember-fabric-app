@@ -1,0 +1,53 @@
+table dim_date
+	lineageTag: bb30ce43-45f9-4f17-affd-36acabcbaba6
+	sourceLineageTag: [mart].[dim_date]
+
+	column month_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 431cc08a-90df-48d3-abe7-43764a1c2263
+		sourceLineageTag: month_date
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: a87f0ae8-e3f8-4615-8f04-e436ab5d05d0
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_num
+		dataType: int64
+		formatString: 0
+		lineageTag: d4322eaa-947e-4790-b21d-7b810c31c82a
+		sourceLineageTag: month_num
+		summarizeBy: none
+		sourceColumn: month_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 580b2e53-487d-418f-9d0a-41a57f335f6a
+		sourceLineageTag: month_name
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_num
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+

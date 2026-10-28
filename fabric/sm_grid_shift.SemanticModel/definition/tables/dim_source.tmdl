@@ -1,0 +1,73 @@
+table dim_source
+	lineageTag: d411bd3a-708d-4e86-a48b-e181996bcbe9
+	sourceLineageTag: [mart].[dim_source]
+
+	column source_key
+		dataType: int64
+		formatString: 0
+		lineageTag: dadde20d-28bb-4587-8516-6fcc097cdee6
+		sourceLineageTag: source_key
+		summarizeBy: none
+		sourceColumn: source_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_name
+		dataType: string
+		lineageTag: 41612969-814e-4820-a1c7-7158557849c4
+		sourceLineageTag: source_name
+		summarizeBy: none
+		sourceColumn: source_name
+		sortByColumn: sort_order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_aggregated
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4906c976-29bd-46b3-b5c4-12469724b8af
+		sourceLineageTag: is_aggregated
+		summarizeBy: none
+		sourceColumn: is_aggregated
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_group
+		dataType: string
+		lineageTag: 66910188-bd05-4659-a3ab-37da57eb9f67
+		sourceLineageTag: source_group
+		summarizeBy: none
+		sourceColumn: source_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column color_hex
+		dataType: string
+		lineageTag: 1fd2b88b-2359-42c5-975b-a3908bcdf3b6
+		sourceLineageTag: color_hex
+		summarizeBy: none
+		sourceColumn: color_hex
+
+		annotation SummarizationSetBy = Automatic
+
+	column sort_order
+		dataType: int64
+		formatString: 0
+		lineageTag: eeac0458-a849-4cf4-894f-fef6f72a63d1
+		sourceLineageTag: sort_order
+		summarizeBy: none
+		sourceColumn: sort_order
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	partition dim_source = entity
+		mode: directLake
+		source
+			entityName: dim_source
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+

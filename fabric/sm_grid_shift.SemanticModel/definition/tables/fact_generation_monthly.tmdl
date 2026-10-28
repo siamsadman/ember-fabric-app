@@ -1,0 +1,87 @@
+table fact_generation_monthly
+	lineageTag: e3b183fd-2d37-482d-9a2c-d386a8d791d4
+	sourceLineageTag: [mart].[fact_generation_monthly]
+
+	column area_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 01ce6a7e-064d-4226-86d4-68bca8a4a426
+		sourceLineageTag: area_key
+		summarizeBy: none
+		sourceColumn: area_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 08409d05-85b3-4b0f-b825-4b2e4f2e9f94
+		sourceLineageTag: source_key
+		summarizeBy: none
+		sourceColumn: source_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a96ba9a7-9026-4173-b0d2-01dccae6ea55
+		sourceLineageTag: month_date
+		summarizeBy: none
+		sourceColumn: month_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column generation_twh
+		dataType: double
+		lineageTag: 2f579cf5-7c48-4d5c-b375-08e366d2e62a
+		sourceLineageTag: generation_twh
+		summarizeBy: sum
+		sourceColumn: generation_twh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column share_pct
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c371588c-55f3-45a5-9046-f8d7a2eb7610
+		sourceLineageTag: share_pct
+		summarizeBy: sum
+		sourceColumn: share_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column emissions_mtco2e
+		dataType: double
+		lineageTag: b65fe7c8-8505-4285-80ca-3eee8f2476eb
+		sourceLineageTag: emissions_mtco2e
+		summarizeBy: sum
+		sourceColumn: emissions_mtco2e
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column intensity_g_per_kwh
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5f56b606-2f32-4bbe-a20e-c7fefd7b9627
+		sourceLineageTag: intensity_g_per_kwh
+		summarizeBy: sum
+		sourceColumn: intensity_g_per_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fact_generation_monthly = entity
+		mode: directLake
+		source
+			entityName: fact_generation_monthly
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+

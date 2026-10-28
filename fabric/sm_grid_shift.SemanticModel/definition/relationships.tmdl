@@ -1,0 +1,24 @@
+relationship fddd86ca-1b6f-154a-738b-3c43e1a94dd1
+	fromColumn: fact_generation_yearly.area_key
+	toColumn: dim_area.area_key
+
+relationship 003689bf-a150-d12b-2ab1-250efd567187
+	fromColumn: fact_generation_yearly.source_key
+	toColumn: dim_source.source_key
+
+relationship 1c3a4ecb-0f03-70fe-738b-d4d9347f4f7e
+	fromColumn: fact_generation_yearly.year
+	toColumn: dim_year.year
+
+relationship 29e7bb05-f65a-d743-1c0d-e503d32d85de
+	fromColumn: fact_generation_monthly.area_key
+	toColumn: dim_area.area_key
+
+relationship cb7601c3-7df6-3bc1-dc8c-a3086e541410
+	fromColumn: fact_generation_monthly.source_key
+	toColumn: dim_source.source_key
+
+relationship 5757510d-d9e9-e7be-c706-5bbd62cf8ea1
+	fromColumn: fact_generation_monthly.month_date
+	toColumn: dim_date.month_date
+

@@ -1,0 +1,21 @@
+table dim_year
+	lineageTag: ef94a68a-ef0e-4b9a-8cf0-73d2573c3ed4
+	sourceLineageTag: [mart].[dim_year]
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: a20a2ce4-dece-4da7-a0de-519a01edf34a
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_year = entity
+		mode: directLake
+		source
+			entityName: dim_year
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+

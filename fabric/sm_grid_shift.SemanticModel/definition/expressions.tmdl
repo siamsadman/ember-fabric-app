@@ -1,0 +1,11 @@
+expression 'DirectLake - wh_grid_shift' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/92812767-e767-4230-99ea-6bf953d662a5/b3ba16a4-012e-4713-ab0a-a5efe2b85721", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 2fd818c2-0f8d-4dab-9f31-4af272cb5010
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[stg_yearly]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[stg_monthly]"}},"objectType":"Table"}]
+

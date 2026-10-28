@@ -1,0 +1,98 @@
+table fact_generation_yearly
+	lineageTag: 510013c5-ad64-4bc4-b727-a75ed2e42f39
+	sourceLineageTag: [mart].[fact_generation_yearly]
+
+	column area_key
+		dataType: int64
+		formatString: 0
+		lineageTag: e29db485-7473-4388-824b-1626153c409a
+		sourceLineageTag: area_key
+		summarizeBy: none
+		sourceColumn: area_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ef10c66-6cef-487b-92da-a3261d8e9525
+		sourceLineageTag: source_key
+		summarizeBy: none
+		sourceColumn: source_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 73da813c-18fe-428b-ac69-9913dfbb9df4
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column generation_twh
+		dataType: double
+		lineageTag: 81b30d98-1f0d-46f6-ae34-0a2fcd371a35
+		sourceLineageTag: generation_twh
+		summarizeBy: sum
+		sourceColumn: generation_twh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column share_pct
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 93adb228-01c0-46d7-82fd-b2ea3ebbd12c
+		sourceLineageTag: share_pct
+		summarizeBy: sum
+		sourceColumn: share_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column capacity_gw
+		dataType: double
+		lineageTag: 6187a0fe-fc50-4221-882d-a1674b279ef2
+		sourceLineageTag: capacity_gw
+		summarizeBy: sum
+		sourceColumn: capacity_gw
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column emissions_mtco2e
+		dataType: double
+		lineageTag: 96bd231a-8da2-47ee-86df-34d2c265e333
+		sourceLineageTag: emissions_mtco2e
+		summarizeBy: sum
+		sourceColumn: emissions_mtco2e
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column intensity_g_per_kwh
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4ebc9b26-1966-486a-9a73-44d8911e4dc4
+		sourceLineageTag: intensity_g_per_kwh
+		summarizeBy: sum
+		sourceColumn: intensity_g_per_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fact_generation_yearly = entity
+		mode: directLake
+		source
+			entityName: fact_generation_yearly
+			schemaName: mart
+			expressionSource: 'DirectLake - wh_grid_shift'
+
