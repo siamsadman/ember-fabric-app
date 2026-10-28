@@ -49,3 +49,9 @@ Repo with dataflow/warehouse/semantic-model/app code, README with architecture d
 - App (preview) item may not appear in the tenant/region -> fallback: same semantic model plus a Power BI report, and a static snapshot site.
 - Trial capacity size unknown (throttling if small).
 - Rayfin is preview: commands may differ from this brief.
+
+## Deviations from the plan above (updated Oct 28 2026, as built)
+- Dataflow Gen2 (df_ember_load) loads two cleaned staging tables, dbo.stg_yearly and dbo.stg_monthly, into wh_grid_shift (takes about 20 minutes to run). Row counts verified: 104,241 and 181,459.
+- Dimensions and facts are built with T-SQL (warehouse/01_mart_schema.sql) in schema mart, not in Power Query. Date handling uses two tables: dim_year (yearly grain) and dim_date (monthly grain).
+- Semantic model sm_grid_shift is Direct Lake on OneLake. Edited as TMDL through Git integration (branch fabric). 22 measures verified: Bangladesh 2025 gas share 64.29%, coal 21.52%, import share 14.17%, intensity 696.1 gCO2e/kWh, capacity 29.73 GW, total generation 103.391 TWh.
+- Fabric App: Rayfin dataapp template reads the semantic model through the fabric-semanticmodel connector (executeQuery, delegated auth). Needs the Semantic Model Execute Queries REST API tenant setting and Build + Read on the model.
