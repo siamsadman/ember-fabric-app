@@ -4,11 +4,14 @@ table dim_area
 
 	column area_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 2535a29c-e6bc-4d6b-bcdf-d35587b7f52f
 		sourceLineageTag: area_key
 		summarizeBy: none
 		sourceColumn: area_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

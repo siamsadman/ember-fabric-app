@@ -2,42 +2,90 @@ table fact_generation_monthly
 	lineageTag: e3b183fd-2d37-482d-9a2c-d386a8d791d4
 	sourceLineageTag: [mart].[fact_generation_monthly]
 
+	/// Monthly electricity generation in TWh for the sources in the current filter context. Aggregated sources must not be summed with individual fuels.
+	measure 'Monthly Generation TWh' = SUM(fact_generation_monthly[generation_twh])
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: 8f8f410f-0fbd-4556-bfbc-46f5d7a1d25d
+
+	/// Monthly total electricity generation in TWh (the Ember "Total generation" source).
+	measure 'Monthly Total Generation TWh' = CALCULATE([Monthly Generation TWh], REMOVEFILTERS(dim_source), dim_source[source_name] = "Total generation")
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: 340188af-2254-4227-9c8f-b213d8bd0d44
+
+	/// Monthly gas generation as a share of total generation.
+	measure 'Monthly Gas Share %' = DIVIDE(CALCULATE([Monthly Generation TWh], dim_source[source_name] = "Gas"), [Monthly Total Generation TWh])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 4921bac7-ed4b-4501-855e-9b291a31afd5
+
+	/// Monthly coal generation as a share of total generation.
+	measure 'Monthly Coal Share %' = DIVIDE(CALCULATE([Monthly Generation TWh], dim_source[source_name] = "Coal"), [Monthly Total Generation TWh])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 791b015f-93b9-44bc-9f16-ad3c8bdac033
+
+	/// Monthly clean generation (Ember aggregate "Clean") as a share of total generation.
+	measure 'Monthly Clean Share %' = DIVIDE(CALCULATE([Monthly Generation TWh], dim_source[source_name] = "Clean"), [Monthly Total Generation TWh])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 46e20f83-6f5d-44df-9ec5-19427090a606
+
+	/// Monthly generation-weighted carbon intensity in gCO2e per kWh: emissions divided by total generation.
+	measure 'Monthly Carbon Intensity' = DIVIDE(CALCULATE(SUM(fact_generation_monthly[emissions_mtco2e]), REMOVEFILTERS(dim_source), dim_source[source_name] = "Total generation") * 1000, [Monthly Total Generation TWh])
+		formatString: #,0
+		displayFolder: Carbon
+		lineageTag: ef2211aa-c85d-47af-b6ff-67a5c4e540f4
+
 	column area_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 01ce6a7e-064d-4226-86d4-68bca8a4a426
 		sourceLineageTag: area_key
 		summarizeBy: none
 		sourceColumn: area_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column source_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 08409d05-85b3-4b0f-b825-4b2e4f2e9f94
 		sourceLineageTag: source_key
 		summarizeBy: none
 		sourceColumn: source_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column month_date
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: a96ba9a7-9026-4173-b0d2-01dccae6ea55
 		sourceLineageTag: month_date
 		summarizeBy: none
 		sourceColumn: month_date
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column generation_twh
 		dataType: double
+		isHidden
 		lineageTag: 2f579cf5-7c48-4d5c-b375-08e366d2e62a
 		sourceLineageTag: generation_twh
 		summarizeBy: sum
 		sourceColumn: generation_twh
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -45,22 +93,30 @@ table fact_generation_monthly
 
 	column share_pct
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		isHidden
+		formatString: #,0.0
 		lineageTag: c371588c-55f3-45a5-9046-f8d7a2eb7610
 		sourceLineageTag: share_pct
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: share_pct
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		changedProperty = FormatString
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
 
 	column emissions_mtco2e
 		dataType: double
+		isHidden
 		lineageTag: b65fe7c8-8505-4285-80ca-3eee8f2476eb
 		sourceLineageTag: emissions_mtco2e
 		summarizeBy: sum
 		sourceColumn: emissions_mtco2e
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -68,15 +124,20 @@ table fact_generation_monthly
 
 	column intensity_g_per_kwh
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		isHidden
+		formatString: #,0
 		lineageTag: 5f56b606-2f32-4bbe-a20e-c7fefd7b9627
 		sourceLineageTag: intensity_g_per_kwh
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: intensity_g_per_kwh
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		changedProperty = FormatString
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
 
 	partition fact_generation_monthly = entity
 		mode: directLake

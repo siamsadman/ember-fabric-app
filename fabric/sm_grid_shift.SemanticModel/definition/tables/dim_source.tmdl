@@ -4,11 +4,14 @@ table dim_source
 
 	column source_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: dadde20d-28bb-4587-8516-6fcc097cdee6
 		sourceLineageTag: source_key
 		summarizeBy: none
 		sourceColumn: source_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -54,6 +57,7 @@ table dim_source
 
 	column sort_order
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: eeac0458-a849-4cf4-894f-fef6f72a63d1
 		sourceLineageTag: sort_order
@@ -61,6 +65,8 @@ table dim_source
 		sourceColumn: sort_order
 
 		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = User
 

@@ -24,11 +24,14 @@ table dim_date
 
 	column month_num
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: d4322eaa-947e-4790-b21d-7b810c31c82a
 		sourceLineageTag: month_num
 		summarizeBy: none
 		sourceColumn: month_num
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

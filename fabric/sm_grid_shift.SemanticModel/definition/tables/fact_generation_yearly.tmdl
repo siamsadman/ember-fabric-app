@@ -2,42 +2,150 @@ table fact_generation_yearly
 	lineageTag: 510013c5-ad64-4bc4-b727-a75ed2e42f39
 	sourceLineageTag: [mart].[fact_generation_yearly]
 
+	/// Electricity generation in TWh for the sources in the current filter context. Aggregated sources (Total generation, Fossil, Clean and others) must not be summed with individual fuels.
+	measure 'Generation TWh' = SUM(fact_generation_yearly[generation_twh])
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: 40f9e664-04ca-4b38-bd77-d8d1f1e28019
+
+	/// Total electricity generation in TWh (the Ember "Total generation" source).
+	measure 'Total Generation TWh' = CALCULATE([Generation TWh], REMOVEFILTERS(dim_source), dim_source[source_name] = "Total generation")
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: 68e631fa-711e-4a3c-9fb3-64fdf6fb21f8
+
+	/// Electricity demand in TWh (the Ember "Demand" source).
+	measure 'Demand TWh' = CALCULATE([Generation TWh], REMOVEFILTERS(dim_source), dim_source[source_name] = "Demand")
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: 4e01eb09-6e55-4239-8178-ed2126b6ec9e
+
+	/// Net electricity imports in TWh (the Ember "Net imports" source).
+	measure 'Net Imports TWh' = CALCULATE([Generation TWh], REMOVEFILTERS(dim_source), dim_source[source_name] = "Net imports")
+		formatString: #,0.0
+		displayFolder: Generation
+		lineageTag: fae199b9-f02f-488b-8d3f-dc285b31f079
+
+	/// Generation of the sources in the current filter context as a share of total generation.
+	measure 'Source Share %' = DIVIDE([Generation TWh], [Total Generation TWh])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 1e3c3298-6d2a-4e3d-8355-9441a3606b83
+
+	/// Gas generation as a share of total generation.
+	measure 'Gas Share %' = CALCULATE([Source Share %], dim_source[source_name] = "Gas")
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: fe6727d8-96df-47cc-b905-fe29e4b85b87
+
+	/// Coal generation as a share of total generation.
+	measure 'Coal Share %' = CALCULATE([Source Share %], dim_source[source_name] = "Coal")
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: a88d6187-ba7c-4019-9a73-88bff852c86d
+
+	/// Solar generation as a share of total generation.
+	measure 'Solar Share %' = CALCULATE([Source Share %], dim_source[source_name] = "Solar")
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 0e54ac02-0f5f-440c-baf6-0b1b73b87ea9
+
+	/// Fossil generation (Ember aggregate "Fossil") as a share of total generation.
+	measure 'Fossil Share %' = CALCULATE([Source Share %], dim_source[source_name] = "Fossil")
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 0cae7b1d-ae9e-4eaa-95cc-38d423457b14
+
+	/// Clean generation (Ember aggregate "Clean") as a share of total generation.
+	measure 'Clean Share %' = CALCULATE([Source Share %], dim_source[source_name] = "Clean")
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 9ba54949-8022-459b-a1ed-df6b83c11555
+
+	/// Net imports as a share of total generation.
+	measure 'Import Share %' = DIVIDE([Net Imports TWh], [Total Generation TWh])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 571c7f44-bd8d-4a94-aa02-e99d39e7ddb0
+
+	/// Power sector emissions in MtCO2e, taken from the Total generation source.
+	measure 'Emissions MtCO2e' = CALCULATE(SUM(fact_generation_yearly[emissions_mtco2e]), REMOVEFILTERS(dim_source), dim_source[source_name] = "Total generation")
+		formatString: #,0.0
+		displayFolder: Carbon
+		lineageTag: abc4372f-c605-40f0-b1d4-9deda12b0afd
+
+	/// Generation-weighted carbon intensity in gCO2e per kWh: emissions divided by total generation (1 MtCO2e per TWh = 1,000 g per kWh).
+	measure 'Carbon Intensity gCO2 per kWh' = DIVIDE([Emissions MtCO2e] * 1000, [Total Generation TWh])
+		formatString: #,0
+		displayFolder: Carbon
+		lineageTag: 97508806-a4b4-4d37-8b82-8f5d1359a322
+
+	/// Installed generating capacity in GW, taken from the Total generation source.
+	measure 'Capacity GW' = CALCULATE(SUM(fact_generation_yearly[capacity_gw]), REMOVEFILTERS(dim_source), dim_source[source_name] = "Total generation")
+		formatString: #,0.0
+		displayFolder: Capacity
+		lineageTag: 2c74f9f4-7b19-4bbf-8fed-eecacbf09965
+
+	/// Gas share of total generation in the previous year. Blank unless exactly one year is selected.
+	measure 'Gas Share PY' = CALCULATE([Gas Share %], REMOVEFILTERS(dim_year[year]), dim_year[year] = SELECTEDVALUE(dim_year[year]) - 1)
+		formatString: 0.0%
+		displayFolder: Change
+		lineageTag: 1f24823e-7696-4574-8f76-8abaad19e808
+
+	/// Change in gas share versus the previous year, in percentage points. Blank when there is no previous year.
+	measure 'Gas Share YoY pts' = IF(NOT ISBLANK([Gas Share PY]), ([Gas Share %] - [Gas Share PY]) * 100)
+		formatString: #,0.0
+		displayFolder: Change
+		lineageTag: f29660c0-08c2-4106-bfc9-ca43bb8e6ceb
+
 	column area_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: e29db485-7473-4388-824b-1626153c409a
 		sourceLineageTag: area_key
 		summarizeBy: none
 		sourceColumn: area_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column source_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 0ef10c66-6cef-487b-92da-a3261d8e9525
 		sourceLineageTag: source_key
 		summarizeBy: none
 		sourceColumn: source_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column year
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 73da813c-18fe-428b-ac69-9913dfbb9df4
 		sourceLineageTag: year
 		summarizeBy: none
 		sourceColumn: year
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column generation_twh
 		dataType: double
+		isHidden
 		lineageTag: 81b30d98-1f0d-46f6-ae34-0a2fcd371a35
 		sourceLineageTag: generation_twh
 		summarizeBy: sum
 		sourceColumn: generation_twh
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -45,22 +153,30 @@ table fact_generation_yearly
 
 	column share_pct
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		isHidden
+		formatString: #,0.0
 		lineageTag: 93adb228-01c0-46d7-82fd-b2ea3ebbd12c
 		sourceLineageTag: share_pct
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: share_pct
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		changedProperty = FormatString
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
 
 	column capacity_gw
 		dataType: double
+		isHidden
 		lineageTag: 6187a0fe-fc50-4221-882d-a1674b279ef2
 		sourceLineageTag: capacity_gw
 		summarizeBy: sum
 		sourceColumn: capacity_gw
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -68,10 +184,13 @@ table fact_generation_yearly
 
 	column emissions_mtco2e
 		dataType: double
+		isHidden
 		lineageTag: 96bd231a-8da2-47ee-86df-34d2c265e333
 		sourceLineageTag: emissions_mtco2e
 		summarizeBy: sum
 		sourceColumn: emissions_mtco2e
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -79,15 +198,20 @@ table fact_generation_yearly
 
 	column intensity_g_per_kwh
 		dataType: decimal
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		isHidden
+		formatString: #,0
 		lineageTag: 4ebc9b26-1966-486a-9a73-44d8911e4dc4
 		sourceLineageTag: intensity_g_per_kwh
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: intensity_g_per_kwh
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		changedProperty = FormatString
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
 
 	partition fact_generation_yearly = entity
 		mode: directLake
