@@ -1,0 +1,33 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "df_ember_load",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "stg_yearly": {
+      "queryId": "f128c352-c218-4448-8509-42c57b40777e",
+      "queryName": "stg_yearly"
+    },
+    "Query1_DataDestination": {
+      "queryId": "9ff9cbd1-801a-4917-8aaf-3c4260c0375e",
+      "queryName": "Query1_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "https://files.ember-energy.org/public-downloads/generation/outputs/release_generation_yearly_global.csv",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"87b5c487-c6c0-4478-86c2-a59e26ea5881\",\"DatasourceId\":\"e3090bd4-f294-4b10-88ad-eb26a88da5a5\"}"
+    },
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"87b5c487-c6c0-4478-86c2-a59e26ea5881\",\"DatasourceId\":\"676e2841-8bc0-48b1-8e3d-4343653434ba\"}"
+    }
+  ]
+}
