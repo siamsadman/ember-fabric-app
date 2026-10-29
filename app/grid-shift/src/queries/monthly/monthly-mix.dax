@@ -1,0 +1,22 @@
+// Monthly generation (TWh) by individual fuel for one area, January 2019 to the latest month
+// in the data. Aggregates and net imports are excluded so the stack is total generation.
+DEFINE
+    VAR _AreaName = "Bangladesh"
+    VAR _Fuels =
+        FILTER(
+            ALL(dim_source[source_name], dim_source[is_aggregated], dim_source[source_group]),
+            NOT dim_source[is_aggregated] && dim_source[source_group] <> "Imports"
+        )
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    dim_date[month_date],
+    dim_source[source_name],
+    dim_source[sort_order],
+    dim_source[color_hex],
+    TREATAS({ _AreaName }, dim_area[area_name]),
+    FILTER(ALL(dim_date[month_date]), dim_date[month_date] >= DATE(2019, 1, 1)),
+    _Fuels,
+    "TWh", [Monthly Generation TWh]
+)
+ORDER BY dim_date[month_date], dim_source[sort_order]

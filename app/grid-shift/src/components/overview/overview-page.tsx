@@ -1,15 +1,39 @@
 import { useState } from "react";
 import { Moon, Sun, Zap } from "lucide-react";
 import { useThemeContext } from "@/hooks/theme.context";
+import { areaPossessive } from "@/lib/area-names";
 import { DEFAULT_AREA } from "@/queries";
 import { AreaPicker } from "./area-picker";
 import { KpiCards } from "./kpi-cards";
 import { LatestMixChart, MixOverTimeChart, PeerIntensityChart } from "./overview-charts";
+import { MonthlyView } from "../monthly/monthly-view";
+import { ViewTabs } from "../view-tabs";
+import { panelId, tabId, type AppView } from "../views";
 import { WatchlistCard } from "./watchlist/watchlist-card";
+
+function OverviewContent({ area, onSelectArea }: { area: string; onSelectArea: (area: string) => void }) {
+    return (
+        <>
+            <KpiCards area={area} />
+            <div className="grid grid-cols-1 items-start gap-grid lg:grid-cols-12">
+                <MixOverTimeChart area={area} className="lg:col-span-8" heightClassName="h-136 sm:h-120" />
+                <LatestMixChart area={area} className="lg:col-span-4" heightClassName="h-120" />
+                <PeerIntensityChart
+                    area={area}
+                    className="lg:col-span-7"
+                    heightClassName="h-80 sm:h-72"
+                    onSelectArea={onSelectArea}
+                />
+                <WatchlistCard areaName={area} className="lg:col-span-5" />
+            </div>
+        </>
+    );
+}
 
 export function OverviewPage() {
     const { isDark, toggleTheme } = useThemeContext();
     const [area, setArea] = useState<string>(DEFAULT_AREA);
+    const [view, setView] = useState<AppView>("overview");
 
     return (
         <div className="min-h-full bg-background">
@@ -23,7 +47,9 @@ export function OverviewPage() {
                             <div className="min-w-0">
                                 <h1 className="font-page-title text-page-title font-bold text-emphasis-foreground">Grid Shift</h1>
                                 <p className="font-page-subtitle text-page-subtitle text-muted-foreground">
-                                    How {area}'s electricity is generated, and how it compares with South Asia and the world.
+                                    {view === "monthly"
+                                        ? `How ${areaPossessive(area)} electricity generation moves month by month.`
+                                        : `How ${areaPossessive(area)} electricity is generated, and how it compares with South Asia and the world.`}
                                 </p>
                             </div>
                         </div>
@@ -36,22 +62,21 @@ export function OverviewPage() {
                             {isDark ? <Sun aria-hidden="true" className="icon-size-300" /> : <Moon aria-hidden="true" className="icon-size-300" />}
                         </button>
                     </div>
+                    <ViewTabs view={view} onChange={setView} />
                     <AreaPicker area={area} onChange={setArea} />
                 </header>
 
-                <main className="flex flex-col gap-grid">
-                    <KpiCards area={area} />
-                    <div className="grid grid-cols-1 items-start gap-grid lg:grid-cols-12">
-                        <MixOverTimeChart area={area} className="lg:col-span-8" heightClassName="h-128 sm:h-112" />
-                        <LatestMixChart area={area} className="lg:col-span-4" heightClassName="h-112" />
-                        <PeerIntensityChart
-                            area={area}
-                            className="lg:col-span-7"
-                            heightClassName="h-80 sm:h-72"
-                            onSelectArea={setArea}
-                        />
-                        <WatchlistCard areaName={area} className="lg:col-span-5" />
-                    </div>
+                <main
+                    id={panelId(view)}
+                    role="tabpanel"
+                    aria-labelledby={tabId(view)}
+                    className="flex flex-col gap-grid"
+                >
+                    {view === "monthly" ? (
+                        <MonthlyView areaName={area} />
+                    ) : (
+                        <OverviewContent area={area} onSelectArea={setArea} />
+                    )}
                 </main>
 
                 <footer className="flex flex-col gap-1 border-t pt-4 text-200 text-muted-foreground sm:flex-row sm:justify-between">

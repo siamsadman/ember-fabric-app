@@ -17,6 +17,20 @@ export function formatWhole(value: number | undefined): string {
     return value === undefined ? NO_VALUE : whole.format(value);
 }
 
+const twoDecimals = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** Monthly TWh values for one area are often single digits, so two decimals. */
+export function formatTwh(value: number | undefined): string {
+    return value === undefined ? NO_VALUE : twoDecimals.format(value);
+}
+
+/** Signed relative change, e.g. "+22.5%" or "−19.3%". */
+export function formatPercentChange(value: number | undefined): string {
+    if (value === undefined) return NO_VALUE;
+    const sign = value > 0 ? "+" : value < 0 ? "−" : "";
+    return `${sign}${percent.format(Math.abs(value))}`;
+}
+
 /** Signed percentage-point change, e.g. "+1.2 pts" or "−1.6 pts". */
 export function formatPoints(value: number | undefined): string {
     if (value === undefined) return NO_VALUE;

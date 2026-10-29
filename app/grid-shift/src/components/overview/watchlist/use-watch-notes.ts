@@ -71,20 +71,51 @@ export function useWatchNotes(areaName: string) {
         [areaName],
     );
 
-    const remove = useCallback(async (id: string) => {
-        setDeletingId(id);
-        setDeleteError(undefined);
-        try {
-            await deleteWatchNote(id);
-            setState((prev) =>
-                prev.status === "ready" ? { ...prev, notes: prev.notes.filter((n) => n.id !== id) } : prev,
-            );
-        } catch (err) {
-            setDeleteError(asNotesError(err));
-        } finally {
-            setDeletingId(undefined);
-        }
-    }, []);
+    /**
+     * Deletes a note, then re-reads the area's notes from the server. The row stays on screen
+     * (marked as deleting) until the server has confirmed the delete and the reloaded list no
+     * longer contains it; the list is never edited locally, so it always shows what the
+     * server holds.
+     */
+    const remove = useCallback(
+        async (id: string) => {
+            const generation = requestRef.current;
+            setDeletingId(id);
+            setDeleteError(undefined);
+            try {
+                try {
+                    await deleteWatchNote(id);
+                } catch (err) {
+                    setDeleteError(asNotesError(err));
+                    return;
+                }
+                // The area changed while deleting; its own load already shows server state.
+                if (generation !== requestRef.current) return;
+
+                const request = ++requestRef.current;
+                try {
+                    const page = await listWatchNotes(areaName);
+                    if (request !== requestRef.current) return;
+                    setState({ status: "ready", ...page });
+                    if (page.notes.some((n) => n.id === id)) {
+                        setDeleteError(
+                            new WatchNotesError(
+                                "unavailable",
+                                "The note is still saved on the server, so it was not deleted. Try again.",
+                            ),
+                        );
+                    }
+                } catch (err) {
+                    if (request !== requestRef.current) return;
+                    // Without a fresh list the card can't show what the server holds.
+                    setState({ status: "error", error: asNotesError(err) });
+                }
+            } finally {
+                setDeletingId(undefined);
+            }
+        },
+        [areaName],
+    );
 
     return { state, reload: load, save, saving, saveError, remove, deletingId, deleteError };
 }

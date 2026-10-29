@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { toDaxString, withArea } from "./area-param";
 import { latestMix, mixOverTime, overviewKpis, peerIntensity } from ".";
+import { monthlyMix, monthlyYoy } from "../monthly";
 
 describe("toDaxString", () => {
     it("doubles embedded quotes", () => {
@@ -29,6 +30,8 @@ describe("overview factories", () => {
         ["mixOverTime", mixOverTime],
         ["latestMix", latestMix],
         ["peerIntensity", peerIntensity],
+        ["monthlyMix", monthlyMix],
+        ["monthlyYoy", monthlyYoy],
     ])("%s defaults to Bangladesh and accepts another area", (_name, factory) => {
         expect(factory().query).toContain('VAR _AreaName = "Bangladesh"');
         const india = factory({ area: "India" });
@@ -38,7 +41,7 @@ describe("overview factories", () => {
     });
 
     it("aliases every column to a bracket-free name", () => {
-        for (const factory of [overviewKpis, mixOverTime, latestMix, peerIntensity]) {
+        for (const factory of [overviewKpis, mixOverTime, latestMix, peerIntensity, monthlyMix, monthlyYoy]) {
             for (const column of Object.values(factory().columnMetadata)) {
                 expect(column.name).toMatch(/^[A-Za-z]+$/);
             }

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { VisualizationSpec } from "@microsoft/fabric-visuals";
 import type { DataTable } from "@microsoft/fabric-visuals-core";
 import { contrastRatio } from "./color-contrast";
-import { fuelColors, withFuelColors } from "./source-colors";
+import { fuelColors, fuelLegendItems, withFuelColors } from "./source-colors";
 
 // Same column shape as the latest-mix query after toDataTable.
 const table: DataTable = {
@@ -66,5 +66,17 @@ describe("withFuelColors", () => {
     it("returns the spec unchanged when the table has no colors", () => {
         const spec = { mark: "area" } as VisualizationSpec;
         expect(withFuelColors(spec, { columns: [{ name: "Fuel" }], rows: [] })).toBe(spec);
+    });
+});
+
+describe("fuelLegendItems", () => {
+    it("matches the chart's color scale exactly, including contrast shading", () => {
+        const spec = { mark: "area", encoding: { color: { field: "Fuel" } } } as unknown as VisualizationSpec;
+        const scale = (withFuelColors(spec, table, "#ffffff") as unknown as {
+            encoding: { color: { scale: { domain: string[]; range: string[] } } };
+        }).encoding.color.scale;
+        const items = fuelLegendItems(table, "#ffffff");
+        expect(items.map((i) => i.fuel)).toEqual(scale.domain);
+        expect(items.map((i) => i.color)).toEqual(scale.range);
     });
 });

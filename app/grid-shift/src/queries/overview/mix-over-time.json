@@ -27,7 +27,7 @@
             "field": "Fuel",
             "type": "nominal",
             "title": null,
-            "legend": { "orient": "bottom", "columns": 5 }
+            "legend": null
         },
         "order": { "field": "SortOrder", "type": "quantitative" },
         "tooltip": [

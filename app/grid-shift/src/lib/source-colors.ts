@@ -51,9 +51,25 @@ function applyScale(node: EncodingHolder, scale: { domain: string[]; range: stri
  * against it is shaded until it passes, e.g. solar `#ffd23f` on a white light-theme card.
  */
 export function withFuelColors(spec: VisualizationSpec, table: DataTable, surface?: string): VisualizationSpec {
-    const colors = fuelColors(table);
-    if (colors.length === 0) return spec;
-    const range = colors.map((c) => (surface ? ensureContrast(c.color, surface) : c.color));
-    const scale = { domain: colors.map((c) => c.fuel), range };
+    const items = fuelLegendItems(table, surface);
+    if (items.length === 0) return spec;
+    const scale = { domain: items.map((i) => i.fuel), range: items.map((i) => i.color) };
     return applyScale(spec as EncodingHolder, scale) as VisualizationSpec;
+}
+
+export interface FuelLegendItem {
+    fuel: string;
+    /** The color the chart draws for this fuel, after any contrast shading. */
+    color: string;
+}
+
+/**
+ * The fuels in a result, in `dim_source[sort_order]`, with exactly the colors
+ * {@link withFuelColors} gives the chart, so a legend rendered beside it always matches.
+ */
+export function fuelLegendItems(table: DataTable, surface?: string): FuelLegendItem[] {
+    return fuelColors(table).map((c) => ({
+        fuel: c.fuel,
+        color: surface ? ensureContrast(c.color, surface) : c.color,
+    }));
 }

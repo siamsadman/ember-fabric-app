@@ -3,10 +3,11 @@ import type { DataTable, InteractionEventCallback } from "@microsoft/fabric-visu
 import { VisualContainer } from "@microsoft/fabric-visuals-extensibility";
 import { useThemeContext } from "@/hooks/theme.context";
 import { useSemanticModelQuery } from "@/hooks/use-semantic-model-query";
-import { withFuelColors } from "@/lib/source-colors";
+import { fuelLegendItems, withFuelColors } from "@/lib/source-colors";
 import { toRecords, type TableRecord } from "@/lib/table-records";
 import { toDataTable, type ColumnMetadataMap } from "@/lib/to-data-table";
 import { cn } from "@/lib/utils";
+import { FuelLegend } from "./fuel-legend";
 import { queryFailure } from "./query-failure";
 import { PanelFrame, QueryErrorBanner, Skeleton } from "./query-state";
 
@@ -27,6 +28,8 @@ interface QueryVisualProps {
     emptyMessage: string;
     /** Color `Fuel` encodings with `dim_source[color_hex]` from the result, at 3:1 contrast on the card. */
     fuelColors?: boolean;
+    /** Render a wrapping fuel legend row under the chart (needs `fuelColors`; the spec's own legend should be off). */
+    fuelLegend?: boolean;
     /** Display-only spec changes that depend on the result, e.g. axis headroom for labels. */
     adjustSpec?: (spec: VisualizationSpec, table: DataTable) => VisualizationSpec;
     /** Visible one-line takeaway under the chart, computed from the result. */
@@ -46,6 +49,7 @@ export function QueryVisual({
     describe,
     emptyMessage,
     fuelColors = false,
+    fuelLegend = false,
     adjustSpec,
     takeaway,
     className,
@@ -87,6 +91,7 @@ export function QueryVisual({
     let spec = fuelColors ? withFuelColors(config.vegaLiteSpec, table, theme.background) : config.vegaLiteSpec;
     if (adjustSpec) spec = adjustSpec(spec, table);
     const takeawayText = takeaway?.(records);
+    const legendItems = fuelColors && fuelLegend ? fuelLegendItems(table, theme.background) : [];
 
     // Hand-authored container: the built-in structured header truncates the subtitle to one
     // line, and the takeaway has to sit inside the card body under the chart.
@@ -114,6 +119,7 @@ export function QueryVisual({
                             onInteraction={onInteraction}
                         />
                     </div>
+                    <FuelLegend items={legendItems} />
                     {takeawayText && (
                         <p className="shrink-0 border-l-2 border-brand pl-3 text-400 font-medium text-foreground">
                             {takeawayText}

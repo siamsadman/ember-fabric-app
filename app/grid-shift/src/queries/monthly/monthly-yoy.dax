@@ -1,0 +1,24 @@
+// Gas, coal and total generation (TWh) in the area's latest month with data, and in the
+// same month one year earlier. Both values come from [Monthly Generation TWh].
+DEFINE
+    VAR _AreaName = "Bangladesh"
+    VAR _Area = TREATAS({ _AreaName }, dim_area[area_name])
+    VAR _LatestMonth =
+        CALCULATE(
+            MAXX(FILTER(VALUES(dim_date[month_date]), NOT ISBLANK([Monthly Total Generation TWh])), dim_date[month_date]),
+            _Area
+        )
+    VAR _YearEarlierMonth = EDATE(_LatestMonth, -12)
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    dim_source[source_name],
+    dim_source[sort_order],
+    _Area,
+    TREATAS({ "Gas", "Coal", "Total generation" }, dim_source[source_name]),
+    "Latest Month", _LatestMonth,
+    "Latest TWh", CALCULATE([Monthly Generation TWh], TREATAS({ _LatestMonth }, dim_date[month_date])),
+    "Year Earlier Month", _YearEarlierMonth,
+    "Year Earlier TWh", CALCULATE([Monthly Generation TWh], TREATAS({ _YearEarlierMonth }, dim_date[month_date]))
+)
+ORDER BY dim_source[sort_order]

@@ -1,4 +1,5 @@
 import type { TypedDataClients } from "@microsoft/rayfin-data";
+import { NetworkError } from "@microsoft/rayfin-lib";
 import type { GridShiftDataSchema } from "../../rayfin/data/schema";
 import { getRayfinClient } from "./rayfin-client";
 
@@ -58,8 +59,16 @@ export class WatchNotesError extends Error {
     }
 }
 
+/**
+ * Error text for the detail line. The SDK's HTTP client throws a `NetworkError` carrying
+ * the status for every non-2xx response, so the status is shown when it is known.
+ */
 function describe(err: unknown): string {
-    return err instanceof Error && err.message ? err.message : String(err);
+    const message = err instanceof Error && err.message ? err.message : String(err);
+    if (err instanceof NetworkError && err.status !== undefined && !message.includes(String(err.status))) {
+        return `HTTP ${err.status}: ${message}`;
+    }
+    return message;
 }
 
 /** Wraps any client or network failure so the card can show it instead of crashing. */
@@ -129,13 +138,27 @@ export async function createWatchNote(areaName: string, draft: string): Promise<
     }
 }
 
-/** Deletes one of the signed-in user's notes. */
+/**
+ * Deletes one of the signed-in user's notes and resolves only when the server confirmed it.
+ *
+ * The SDK rejects a non-2xx HTTP status, a GraphQL error, or a response without a deleted
+ * row. On top of that, the row the server returns must be the note that was asked for
+ * (DAB returns the row it deleted); anything else counts as not deleted.
+ */
 export async function deleteWatchNote(id: string): Promise<void> {
+    let deleted: { id?: string } | null | undefined;
     try {
         currentUserId();
-        await watchNotes().delete({ id });
+        deleted = await watchNotes().delete({ id });
     } catch (err) {
         if (err instanceof WatchNotesError) throw err;
         throw unavailable("delete the note", err);
+    }
+    if (typeof deleted?.id !== "string" || deleted.id.toLowerCase() !== id.toLowerCase()) {
+        throw new WatchNotesError(
+            "unavailable",
+            "The server didn't confirm the delete, so the note was kept.",
+            `Asked to delete ${id}; the server returned ${deleted?.id ?? "no row"}.`,
+        );
     }
 }

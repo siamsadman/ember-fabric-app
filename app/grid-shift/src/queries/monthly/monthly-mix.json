@@ -1,0 +1,37 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+    "description": "Stacked area of monthly generation in TWh by individual fuel.",
+    "width": "container",
+    "height": "container",
+    "transform": [
+        { "impute": "TWh", "key": "Month", "groupby": ["Fuel", "SortOrder"], "value": 0 }
+    ],
+    "mark": { "type": "area", "line": true },
+    "encoding": {
+        "x": {
+            "field": "Month",
+            "type": "temporal",
+            "timeUnit": "yearmonth",
+            "title": null,
+            "axis": { "format": "%Y", "tickCount": "year", "labelAngle": 0 }
+        },
+        "y": {
+            "field": "TWh",
+            "type": "quantitative",
+            "stack": "zero",
+            "title": "Generation (TWh)"
+        },
+        "color": {
+            "field": "Fuel",
+            "type": "nominal",
+            "title": null,
+            "legend": null
+        },
+        "order": { "field": "SortOrder", "type": "quantitative" },
+        "tooltip": [
+            { "field": "Month", "type": "temporal", "timeUnit": "yearmonth", "format": "%b %Y", "title": "Month" },
+            { "field": "Fuel", "type": "nominal" },
+            { "field": "TWh", "type": "quantitative", "format": ",.2f", "title": "Generation (TWh)" }
+        ]
+    }
+}

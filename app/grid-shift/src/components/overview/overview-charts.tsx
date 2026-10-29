@@ -1,6 +1,7 @@
 import type { VisualizationSpec } from "@microsoft/fabric-visuals";
 import type { DataTable, InteractionEvent } from "@microsoft/fabric-visuals-core";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { areaPossessive } from "@/lib/area-names";
 import { formatPercent, formatWhole } from "@/lib/format";
 import { mixTakeaway } from "@/lib/mix-takeaway";
 import { asNumber, type TableRecord } from "@/lib/table-records";
@@ -21,17 +22,6 @@ function describeMix(records: TableRecord[]): string {
         .join(", ");
 }
 
-/** Sets the column count of the spec's top-level color legend. */
-function withLegendColumns(spec: VisualizationSpec, columns: number): VisualizationSpec {
-    const node = spec as { encoding?: { color?: { legend?: object } } & Record<string, unknown> };
-    const color = node.encoding?.color;
-    if (!color?.legend) return spec;
-    return {
-        ...node,
-        encoding: { ...node.encoding, color: { ...color, legend: { ...color.legend, columns } } },
-    } as VisualizationSpec;
-}
-
 interface ChartProps {
     area: string;
     className: string;
@@ -39,9 +29,6 @@ interface ChartProps {
 }
 
 export function MixOverTimeChart({ area, className, heightClassName }: ChartProps) {
-    // Five legend columns overflow a phone-width plot; two fit "Other renewables".
-    const wide = useMediaQuery("(min-width: 640px)");
-
     return (
         <QueryVisual
             config={mixOverTime({ area })}
@@ -55,12 +42,12 @@ export function MixOverTimeChart({ area, className, heightClassName }: ChartProp
                 const first = Math.min(...years);
                 const last = Math.max(...years);
                 const inYear = (year: number) => records.filter((r) => r.Year === year);
-                return `Stacked area chart of ${area}'s generation mix. ${first}: ${describeMix(inYear(first))}. ${last}: ${describeMix(inYear(last))}.`;
+                return `Stacked area chart of ${areaPossessive(area)} generation mix. ${first}: ${describeMix(inYear(first))}. ${last}: ${describeMix(inYear(last))}.`;
             }}
             takeaway={mixTakeaway}
             emptyMessage={`No yearly generation mix for ${area} since 2000.`}
             fuelColors
-            adjustSpec={(spec) => withLegendColumns(spec, wide ? 5 : 2)}
+            fuelLegend
             className={className}
             heightClassName={heightClassName}
         />
@@ -77,7 +64,7 @@ export function LatestMixChart({ area, className, heightClassName }: ChartProps)
                 const base = `${area}, ${yearOf(records)}`;
                 return zero.length > 0 ? `${base}. No generation from ${zero.join(", ")}.` : base;
             }}
-            describe={(records) => `Bar chart of ${area}'s generation mix in ${yearOf(records)}: ${describeMix(records)}.`}
+            describe={(records) => `Bar chart of ${areaPossessive(area)} generation mix in ${yearOf(records)}: ${describeMix(records)}.`}
             emptyMessage={`No generation mix for ${area}.`}
             fuelColors
             adjustSpec={(spec: VisualizationSpec, table: DataTable) => withValueHeadroom(spec, table, "Share", 1.3)}

@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { formatOneDecimal, formatPercent, formatPoints, formatWhole, NO_VALUE } from "./format";
+import {
+    formatOneDecimal,
+    formatPercent,
+    formatPercentChange,
+    formatPoints,
+    formatTwh,
+    formatWhole,
+    NO_VALUE,
+} from "./format";
 
 describe("format", () => {
     it("formats shares as one-decimal percentages", () => {
@@ -17,8 +25,16 @@ describe("format", () => {
         expect(formatOneDecimal(31923.181)).toBe("31,923.2");
     });
 
+    it("formats monthly TWh with two decimals and signed relative changes", () => {
+        expect(formatTwh(3.854)).toBe("3.85");
+        expect(formatTwh(12.5)).toBe("12.50");
+        expect(formatPercentChange((3.854 - 3.145) / 3.145)).toBe("+22.5%");
+        expect(formatPercentChange((3.461 - 4.29) / 4.29)).toBe("−19.3%");
+        expect(formatPercentChange(0)).toBe("0.0%");
+    });
+
     it("shows a placeholder for blank measures", () => {
-        for (const format of [formatPercent, formatPoints, formatWhole, formatOneDecimal]) {
+        for (const format of [formatPercent, formatPoints, formatWhole, formatOneDecimal, formatTwh, formatPercentChange]) {
             expect(format(undefined)).toBe(NO_VALUE);
         }
     });
