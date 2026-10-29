@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 390" width="1200" height="390" role="img" aria-labelledby="t d">
+  <title id="t">Grid Shift architecture</title>
+  <desc id="d">Ember CSVs flow through a Dataflow Gen2 into a Fabric Warehouse star schema, then a Direct Lake semantic model, then the Fabric App. The app also writes notes to its own SQL database.</desc>
+  <rect width="1200" height="390" rx="18" fill="#111513"/>
+  <g font-family="Sora, Segoe UI, Arial, sans-serif" fill="#e9efe9">
+    <text x="45" y="52" font-size="22" font-weight="700">Grid Shift: from open data to a Fabric App</text>
+    <text x="45" y="76" font-size="13" fill="#9db0a2">Microsoft Fabric, built on a trial capacity. Data: Ember Electricity Data (CC BY 4.0)</text>
+
+    <g font-size="15" font-weight="700">
+      <rect x="45"   y="110" width="190" height="130" rx="14" fill="#1a211d" stroke="#2a3830"/>
+      <rect x="275"  y="110" width="190" height="130" rx="14" fill="#1a211d" stroke="#2a3830"/>
+      <rect x="505"  y="110" width="190" height="130" rx="14" fill="#1a211d" stroke="#2a3830"/>
+      <rect x="735"  y="110" width="190" height="130" rx="14" fill="#1a211d" stroke="#2a3830"/>
+      <rect x="965"  y="110" width="190" height="130" rx="14" fill="#1a211d" stroke="#ffd23f" stroke-width="2"/>
+
+      <text x="64"  y="142">Ember CSVs</text>
+      <text x="294" y="142">Dataflow Gen2</text>
+      <text x="524" y="142">Warehouse</text>
+      <text x="754" y="142">Semantic model</text>
+      <text x="984" y="142">Fabric App</text>
+    </g>
+    <g font-size="12" fill="#9db0a2">
+      <text x="64"  y="168">Yearly: 104,241 rows</text>
+      <text x="64"  y="188">Monthly: 181,459 rows</text>
+      <text x="64"  y="208">224 / 99 areas</text>
+
+      <text x="294" y="168">df_ember_load</text>
+      <text x="294" y="188">Power Query M</text>
+      <text x="294" y="208">stg_yearly, stg_monthly</text>
+
+      <text x="524" y="168">wh_grid_shift</text>
+      <text x="524" y="188">T-SQL star schema</text>
+      <text x="524" y="208">schema "mart": 4 dims, 2 facts</text>
+
+      <text x="754" y="168">sm_grid_shift</text>
+      <text x="754" y="188">Direct Lake on OneLake</text>
+      <text x="754" y="208">6 relationships, 22 measures</text>
+
+      <text x="984" y="168">grid-shift (preview)</text>
+      <text x="984" y="188">React + TypeScript, Rayfin</text>
+      <text x="984" y="208">Overview and Monthly views</text>
+    </g>
+
+    <g stroke="#ffd23f" stroke-width="2.5" fill="none">
+      <line x1="238" y1="175" x2="272" y2="175"/>
+      <line x1="468" y1="175" x2="502" y2="175"/>
+      <line x1="698" y1="175" x2="732" y2="175"/>
+      <line x1="928" y1="175" x2="962" y2="175"/>
+    </g>
+
+    <g>
+      <rect x="965" y="285" width="190" height="64" rx="14" fill="#1a211d" stroke="#2a3830"/>
+      <text x="984" y="312" font-size="14" font-weight="700">App database</text>
+      <text x="984" y="332" font-size="12" fill="#9db0a2">Fabric SQL: per-user notes</text>
+      <line x1="1060" y1="242" x2="1060" y2="282" stroke="#ffd23f" stroke-width="2.5"/>
+    </g>
+
+
+    <g fill="#ffd23f">
+      <polygon points="272,175 262,169 262,181"/>
+      <polygon points="502,175 492,169 492,181"/>
+      <polygon points="732,175 722,169 722,181"/>
+      <polygon points="962,175 952,169 952,181"/>
+      <polygon points="1060,244 1054,254 1066,254"/>
+      <polygon points="1060,284 1054,274 1066,274"/>
+    </g>
+    <text x="45" y="330" font-size="12" fill="#9db0a2">Definitions sync to GitHub through Fabric Git integration (branch "fabric").</text>
+    <text x="45" y="350" font-size="12" fill="#9db0a2">Every number in the app is read from sm_grid_shift measures. No mock data.</text>
+  </g>
+</svg>

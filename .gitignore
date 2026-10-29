@@ -2,3 +2,6 @@ data/
 *.csv
 node_modules/
 .env
+assets/raw/
+*.mp4
+*.mov
