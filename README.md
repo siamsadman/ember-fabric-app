@@ -1,3 +1,4 @@
+
 # Grid Shift
 
 **How Bangladesh's electricity is generated, and how it compares with South Asia and the world.**
@@ -6,7 +7,12 @@ A Microsoft Fabric project end to end: a Dataflow Gen2 loads Ember's open electr
 
 ![Grid Shift overview for Bangladesh, dark theme](assets/01_Bangladesh_overview_dark_theme.png)
 
-<!-- TODO: add the demo recording link (60-90 s) here before publishing: [Watch the demo](<link>) -->
+
+
+
+https://github.com/user-attachments/assets/2abf29a0-7a3b-4adb-a5df-3e6353965018
+
+
 
 <details>
 <summary>More screenshots</summary>
