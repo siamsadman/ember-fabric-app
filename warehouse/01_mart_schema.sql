@@ -18,7 +18,9 @@ FROM (
               WHEN source_name = 'Net imports' THEN 'Imports'
               ELSE 'Aggregate' END AS varchar(20)) AS source_group,
     CAST(CASE source_name WHEN 'Coal' THEN '#8a93a0' WHEN 'Gas' THEN '#ff8a4c' WHEN 'Hydro' THEN '#3d7bd9'
-              WHEN 'Wind' THEN '#5ec8e5' WHEN 'Solar' THEN '#ffd23f' ELSE '#9db0a2' END AS varchar(7)) AS color_hex,
+              WHEN 'Wind' THEN '#5ec8e5' WHEN 'Solar' THEN '#ffd23f'
+              WHEN 'Other fossil' THEN '#c9a27a' WHEN 'Bioenergy' THEN '#7bc96f' WHEN 'Other renewables' THEN '#b48cff'
+              WHEN 'Nuclear' THEN '#e86fb0' WHEN 'Net imports' THEN '#e9efe9' ELSE '#9db0a2' END AS varchar(7)) AS color_hex,
     CAST(CASE source_name WHEN 'Coal' THEN 1 WHEN 'Gas' THEN 2 WHEN 'Other fossil' THEN 3 WHEN 'Hydro' THEN 4
               WHEN 'Wind' THEN 5 WHEN 'Solar' THEN 6 WHEN 'Bioenergy' THEN 7 WHEN 'Other renewables' THEN 8
               WHEN 'Nuclear' THEN 9 WHEN 'Net imports' THEN 10 ELSE 20 END AS int) AS sort_order

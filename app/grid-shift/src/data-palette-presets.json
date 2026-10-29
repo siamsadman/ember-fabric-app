@@ -1,0 +1,28 @@
+{
+  "palettes": [
+    {
+      "id": "monsoon",
+      "name": "Monsoon",
+      "colors": {
+        "light": ["#1f6f8b", "#7b8a80", "#c25b2a", "#4f6fb3", "#2f8f6a", "#6b7480", "#9a4f9c", "#a37a1c", "#b8435e", "#3d8fa8"],
+        "dark":  ["#5ec8e5", "#6f8577", "#ff9a5c", "#7f9ef0", "#62d1a2", "#8a93a0", "#d68ae0", "#e8c062", "#f27a96", "#8fd8ec"]
+      }
+    },
+    {
+      "id": "delta-clay",
+      "name": "Delta clay",
+      "colors": {
+        "light": ["#b34a1f", "#7b8a80", "#2f62b3", "#6b8f2a", "#8a4fc2", "#6b7480", "#1f8fae", "#a87d00", "#c23e63", "#3c9a4c"],
+        "dark":  ["#ff8a4c", "#6f8577", "#6f9ff0", "#b5d96a", "#c58cf2", "#8a93a0", "#5ec8e5", "#ffd23f", "#f26d8f", "#7fd18b"]
+      }
+    },
+    {
+      "id": "night-grid",
+      "name": "Night grid",
+      "colors": {
+        "light": ["#3a5bd9", "#7b8a80", "#a87d00", "#c23e63", "#1f8fae", "#6b7480", "#3c9a4c", "#d9622a", "#8a4fc2", "#9a7520"],
+        "dark":  ["#8fa8ff", "#6f8577", "#ffd23f", "#f26d8f", "#5ec8e5", "#8a93a0", "#7fd18b", "#ff8a4c", "#c58cf2", "#d9b26a"]
+      }
+    }
+  ]
+}

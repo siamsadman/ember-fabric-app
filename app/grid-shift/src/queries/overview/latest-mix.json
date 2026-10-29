@@ -1,0 +1,40 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+    "description": "Horizontal bars of each fuel's share of generation in the latest year, largest first. Fuels with no generation are hidden.",
+    "width": "container",
+    "height": "container",
+    "transform": [{ "filter": "isValid(datum.Share) && datum.Share > 0" }],
+    "encoding": {
+        "y": {
+            "field": "Fuel",
+            "type": "nominal",
+            "title": null,
+            "sort": { "field": "Share", "op": "max", "order": "descending" }
+        },
+        "x": {
+            "field": "Share",
+            "type": "quantitative",
+            "title": null,
+            "axis": { "format": ".0%", "tickCount": 4 }
+        }
+    },
+    "layer": [
+        {
+            "mark": { "type": "bar" },
+            "encoding": {
+                "color": { "field": "Fuel", "type": "nominal", "legend": null },
+                "tooltip": [
+                    { "field": "Fuel", "type": "nominal" },
+                    { "field": "Share", "type": "quantitative", "format": ".1%" },
+                    { "field": "GenerationTWh", "type": "quantitative", "format": ",.1f", "title": "Generation (TWh)" }
+                ]
+            }
+        },
+        {
+            "mark": { "type": "text", "style": "labelHorizontal" },
+            "encoding": {
+                "text": { "field": "Share", "type": "quantitative", "format": ".1%" }
+            }
+        }
+    ]
+}

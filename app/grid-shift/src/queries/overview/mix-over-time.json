@@ -1,0 +1,39 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+    "description": "Stacked area of each fuel's share of electricity generation by year.",
+    "width": "container",
+    "height": "container",
+    "transform": [
+        { "impute": "Share", "key": "Year", "groupby": ["Fuel", "SortOrder"], "value": 0 }
+    ],
+    "mark": { "type": "area", "line": true },
+    "encoding": {
+        "x": {
+            "field": "Year",
+            "type": "ordinal",
+            "sort": "ascending",
+            "title": null,
+            "axis": { "labelAngle": 0, "labelExpr": "datum.value % 5 == 0 ? datum.label : ''" }
+        },
+        "y": {
+            "field": "Share",
+            "type": "quantitative",
+            "stack": "zero",
+            "title": "Share of generation",
+            "scale": { "domain": [0, 1] },
+            "axis": { "format": ".0%" }
+        },
+        "color": {
+            "field": "Fuel",
+            "type": "nominal",
+            "title": null,
+            "legend": { "orient": "bottom", "columns": 5 }
+        },
+        "order": { "field": "SortOrder", "type": "quantitative" },
+        "tooltip": [
+            { "field": "Year", "type": "ordinal" },
+            { "field": "Fuel", "type": "nominal" },
+            { "field": "Share", "type": "quantitative", "format": ".1%" }
+        ]
+    }
+}

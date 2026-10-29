@@ -1,0 +1,43 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+    "description": "Horizontal bars of carbon intensity for the selected area, South Asia peers and the World.",
+    "width": "container",
+    "height": "container",
+    "encoding": {
+        "y": {
+            "field": "Area",
+            "type": "nominal",
+            "title": null,
+            "sort": { "field": "CarbonIntensity", "op": "max", "order": "descending" }
+        },
+        "x": {
+            "field": "CarbonIntensity",
+            "type": "quantitative",
+            "title": "gCO2 per kWh"
+        }
+    },
+    "layer": [
+        {
+            "mark": { "type": "bar" },
+            "encoding": {
+                "color": {
+                    "field": "IsSelected",
+                    "type": "nominal",
+                    "scale": { "domain": [1, 0] },
+                    "legend": null
+                },
+                "tooltip": [
+                    { "field": "Area", "type": "nominal" },
+                    { "field": "Year", "type": "ordinal" },
+                    { "field": "CarbonIntensity", "type": "quantitative", "format": ",.0f", "title": "gCO2 per kWh" }
+                ]
+            }
+        },
+        {
+            "mark": { "type": "text", "style": "labelHorizontal" },
+            "encoding": {
+                "text": { "field": "CarbonIntensity", "type": "quantitative", "format": ",.0f" }
+            }
+        }
+    ]
+}

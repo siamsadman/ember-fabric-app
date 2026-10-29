@@ -1,0 +1,29 @@
+// Carbon intensity of the selected area, the South Asia peers and the World, all in the
+// selected area's latest year with generation data. Areas with no value that year drop out.
+DEFINE
+    VAR _AreaName = "Bangladesh"
+    VAR _LatestYear =
+        CALCULATE(
+            MAXX(FILTER(VALUES(dim_year[year]), NOT ISBLANK([Total Generation TWh])), dim_year[year]),
+            TREATAS({ _AreaName }, dim_area[area_name])
+        )
+    VAR _Areas =
+        FILTER(
+            ALL(dim_area[area_name], dim_area[is_south_asia_peer]),
+            dim_area[is_south_asia_peer] || dim_area[area_name] = "World" || dim_area[area_name] = _AreaName
+        )
+
+EVALUATE
+SUMMARIZECOLUMNS(
+    dim_year[year],
+    dim_area[area_name],
+    _Areas,
+    TREATAS({ _LatestYear }, dim_year[year]),
+    "Carbon Intensity", [Carbon Intensity gCO2 per kWh],
+    "Is Selected",
+        IF(
+            NOT ISBLANK([Carbon Intensity gCO2 per kWh]),
+            IF(SELECTEDVALUE(dim_area[area_name]) = _AreaName, 1, 0)
+        )
+)
+ORDER BY [Carbon Intensity] DESC

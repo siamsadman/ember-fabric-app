@@ -1,0 +1,8 @@
+// Every area with yearly generation data, for the country picker.
+EVALUATE
+SUMMARIZECOLUMNS(
+    dim_area[area_name],
+    dim_area[area_type],
+    "Latest Year", MAXX(FILTER(VALUES(dim_year[year]), NOT ISBLANK([Total Generation TWh])), dim_year[year])
+)
+ORDER BY dim_area[area_name]

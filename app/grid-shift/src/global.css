@@ -1,0 +1,207 @@
+@layer fabric-visual-tokens, theme, base, fabric-visuals, components, utilities;
+
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* These tokens are consumed directly as CSS variables, so emit them
+   even when no Tailwind utility references them. */
+@theme static {
+  --color-brand:            #ffd23f;  /* branded surfaces: selected chips, accent marks */
+  --color-brand-foreground: #7a5c00;  /* brand-colored content on standard surfaces */
+  --color-hover:            rgba(17, 21, 19, 0.05);  /* row/cell hover surface in DataGrid + visuals */
+  --color-emphasis-foreground: #111513;  /* page and visual titles, KPI values */
+
+  /* Data palette. data-1 is the highlight (selected area), data-2 the muted comparison. */
+  --color-data-1:  #a87d00;
+  --color-data-2:  #7b8a80;
+  --color-data-3:  #d9622a;
+  --color-data-4:  #2f62b3;
+  --color-data-5:  #1f8fae;
+  --color-data-6:  #6b7480;
+  --color-data-7:  #8a4fc2;
+  --color-data-8:  #3c9a4c;
+  --color-data-9:  #c23e63;
+  --color-data-10: #9a7520;
+  --font-page-title: var(--font-heading);
+  --font-page-subtitle: var(--font-base);
+  --font-visual-title: var(--font-heading);
+  --font-visual-subtitle: var(--font-base);
+  --font-data-label: var(--font-base);
+  --text-page-title: var(--text-600);
+  --text-page-subtitle: var(--text-300);
+  --text-visual-title: var(--text-400);
+  --text-visual-subtitle: var(--text-300);
+  --text-data-label: 11px;
+}
+
+@theme {
+  /* Color tokens — light theme
+     Usage: bg-*, text-*, border-* (e.g. bg-brand text-on-brand). */
+  --color-background: #f3f6f3;                                       /* page background */
+  --color-foreground: #17201a;                                       /* default text */
+
+  --color-card: #ffffff;                                             /* card and elevated surfaces */
+
+  --color-on-brand: #111513;                                         /* text/icons on brand surfaces */
+
+  --color-muted: #e6ece7;                                            /* subtle backgrounds, skeletons */
+  --color-muted-foreground: #4a5c50;                                 /* subdued text */
+
+  --color-accent: #e9efe9;                                           /* accent highlights */
+
+  --color-destructive: #b3261e;                                      /* errors & destructive actions */
+  --color-destructive-foreground: #ffffff;
+
+  --color-success: #2e7d4f;                                          /* success surfaces */
+  --color-success-foreground: #ffffff;
+
+  --color-border: #d3ddd5;                                           /* default border */
+  --color-ring: #7a5c00;                                             /* focus rings */
+
+  --shadow-container-2:  var(--shadow-xs);
+  --shadow-container-4:  var(--shadow-sm);
+  --shadow-container-8:  var(--shadow-md);
+  --shadow-container-16: var(--shadow-lg);
+
+  --radius-none: 0;
+  --radius-sm: calc(2px * var(--radius-scale, 1));
+  --radius-md: calc(4px * var(--radius-scale, 1));
+  --radius-lg: calc(6px * var(--radius-scale, 1));
+  --radius-xl: calc(8px * var(--radius-scale, 1));
+  --radius-2xl: calc(12px * var(--radius-scale, 1));
+  --radius-3xl: calc(16px * var(--radius-scale, 1));
+  --radius-4xl: calc(24px * var(--radius-scale, 1));
+  --radius-5xl: calc(32px * var(--radius-scale, 1));
+  --radius-6xl: calc(40px * var(--radius-scale, 1));
+  --radius-full: calc(9999px * var(--radius-scale, 1));
+  --radius: calc(6px * var(--radius-scale, 1));
+
+  /* Spacing base unit
+     Usage: p-*, m-*, gap-* (e.g. p-4 gap-3) */
+  --spacing: 4px;
+
+  /* Font Sizes — 100-based scale 
+     Usage: text-* (e.g. text-300, text-hero-900) */
+  --text-100: 10px;
+  --text-200: 12px;
+  --text-300: 14px;
+  --text-400: 16px;
+  --text-500: 20px;
+  --text-600: 24px;
+  --text-hero-700: 28px;
+  --text-hero-800: 32px;
+  --text-hero-900: 40px;
+  --text-hero-1000: 68px;
+
+  /* Line Heights — paired with font sizes
+     Usage: leading-* (e.g. leading-300) */
+  --leading-100: 14px;
+  --leading-200: 16px;
+  --leading-300: 20px;
+  --leading-400: 22px;
+  --leading-500: 28px;
+  --leading-600: 32px;
+  --leading-hero-700: 36px;
+  --leading-hero-800: 40px;
+  --leading-hero-900: 52px;
+  --leading-hero-1000: 92px;
+
+  /* Font Weights
+     Usage: font-* (e.g. font-semibold) */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Families
+     Usage: font-* (e.g. font-heading, font-base) */
+  --font-heading: 'Sora', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;  /* headings, titles */
+  --font-base: 'Sora', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;     /* body text, controls */
+  --font-monospace: 'Fira Code', Consolas, 'Courier New', monospace;                  /* labels, code */
+  --font-numeric: 'Fira Code', Consolas, 'Courier New', monospace;                    /* KPI values, numbers */
+
+  /* Icon Sizes — 100-based scale
+     Usage: icon-size-* custom utility (e.g. icon-size-200) */
+  --icon-size-100: 12px;
+  --icon-size-200: 16px;
+  --icon-size-300: 20px;
+  --icon-size-400: 24px;
+  --icon-size-500: 28px;
+  --icon-size-600: 32px;
+  --icon-size-700: 48px;
+}
+
+@utility gap-grid {
+  gap: var(--grid-gap, calc(var(--spacing) * 4));
+}
+
+@utility icon-size-* {
+  width: --value(--icon-size-*);
+  height: --value(--icon-size-*);
+}
+
+@layer base {
+  .dark {
+    /* Color tokens — dark theme */
+    --color-background: #111513;
+    --color-foreground: #e9efe9;
+
+    --color-card: #1a211d;
+
+    --color-on-brand: #111513;
+
+    --color-muted: #222b26;
+    --color-muted-foreground: #9db0a2;
+
+    --color-accent: #222b26;
+
+    --color-destructive: #ff8a80;
+    --color-destructive-foreground: #111513;
+
+    --color-success: #7fd18b;
+    --color-success-foreground: #111513;
+
+    --color-border: #2a3830;
+    --color-ring: #ffd23f;
+
+    --color-brand:            #ffd23f;
+    --color-brand-foreground: #ffd23f;
+    --color-hover:            rgba(233, 239, 233, 0.06);
+    --color-emphasis-foreground: #e9efe9;
+
+    --color-data-1:  #ffd23f;
+    --color-data-2:  #6f8577;
+    --color-data-3:  #ff8a4c;
+    --color-data-4:  #3d7bd9;
+    --color-data-5:  #5ec8e5;
+    --color-data-6:  #8a93a0;
+    --color-data-7:  #c58cf2;
+    --color-data-8:  #7fd18b;
+    --color-data-9:  #f26d8f;
+    --color-data-10: #d9b26a;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-base;
+  }
+
+  select,
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}

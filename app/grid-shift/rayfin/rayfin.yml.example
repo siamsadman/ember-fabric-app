@@ -1,0 +1,37 @@
+id: grid-shift
+name: grid-shift
+version: 1.0.0
+services:
+  auth:
+    enabled: true
+    fabric:
+      enabled: true
+    allowedRedirectUris:
+      - http://localhost:5173
+      - http://localhost:3000
+      - http://127.0.0.1:3000
+      - http://127.0.0.1:5173
+      - https://<your-app>.webapp.fabricapps.net
+  data:
+    enabled: false
+  storage:
+    enabled: false
+  staticHosting:
+    enabled: true
+    folder: dist
+    buildCommand: npm run build:fabric
+    indexDocument: index.html
+    assetAccess: protected
+  functions:
+    enabled: false
+connectors:
+  - name: gridmodel
+    type: fabric-semanticmodel
+    config:
+      workspaceId: <GUID>
+      itemId: <GUID>
+    auth:
+      type: delegated
+    version: "1"
+    operations:
+      - name: executeQuery
