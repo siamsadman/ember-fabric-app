@@ -1,5 +1,6 @@
 import { VegaVisual, type VisualizationSpec } from "@microsoft/fabric-visuals";
 import type { DataTable, InteractionEventCallback } from "@microsoft/fabric-visuals-core";
+import { VisualContainer } from "@microsoft/fabric-visuals-extensibility";
 import { useThemeContext } from "@/hooks/theme.context";
 import { useSemanticModelQuery } from "@/hooks/use-semantic-model-query";
 import { withFuelColors } from "@/lib/source-colors";
@@ -87,18 +88,39 @@ export function QueryVisual({
     if (adjustSpec) spec = adjustSpec(spec, table);
     const takeawayText = takeaway?.(records);
 
+    // Hand-authored container: the built-in structured header truncates the subtitle to one
+    // line, and the takeaway has to sit inside the card body under the chart.
     return (
-        <figure className={cn("flex min-w-0 flex-col gap-2", className)} aria-busy={isLoading}>
-            <VegaVisual
-                spec={spec}
-                data={table}
-                theme={theme}
-                header={{ title, subtitle: subtitle(records) }}
-                containerRootClassName={cn("min-w-0", heightClassName)}
-                containerClassName="rounded-3xl"
-                onInteraction={onInteraction}
-            />
-            {takeawayText && <p className="px-2 text-300 text-foreground">{takeawayText}</p>}
+        <figure className={cn("min-w-0", className)} aria-busy={isLoading}>
+            <VisualContainer
+                header={
+                    <div className="min-w-0">
+                        <h2 className="font-visual-title text-visual-title font-semibold text-emphasis-foreground">{title}</h2>
+                        <p className="mt-0.5 text-visual-subtitle text-muted-foreground">{subtitle(records)}</p>
+                    </div>
+                }
+                builtInActionIds={["copyVisual"]}
+                rootClassName={cn("min-w-0", heightClassName)}
+                className="rounded-3xl"
+            >
+                <div className="flex h-full min-h-0 flex-col gap-3">
+                    <div className="min-h-0 flex-1">
+                        <VegaVisual
+                            spec={spec}
+                            data={table}
+                            theme={theme}
+                            chromeless
+                            className="h-full w-full"
+                            onInteraction={onInteraction}
+                        />
+                    </div>
+                    {takeawayText && (
+                        <p className="shrink-0 border-l-2 border-brand pl-3 text-400 font-medium text-foreground">
+                            {takeawayText}
+                        </p>
+                    )}
+                </div>
+            </VisualContainer>
             <figcaption className="sr-only">{describe(records)}</figcaption>
         </figure>
     );

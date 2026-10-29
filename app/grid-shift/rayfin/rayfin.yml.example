@@ -13,7 +13,8 @@ services:
       - http://127.0.0.1:5173
       - https://<your-app>.webapp.fabricapps.net
   data:
-    enabled: false
+    enabled: true
+    dialect: mssql
   storage:
     enabled: false
   staticHosting:

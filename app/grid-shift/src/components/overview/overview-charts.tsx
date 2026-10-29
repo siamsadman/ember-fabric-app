@@ -92,6 +92,11 @@ interface PeerIntensityChartProps extends ChartProps {
 }
 
 export function PeerIntensityChart({ area, className, heightClassName, onSelectArea }: PeerIntensityChartProps) {
+    // Axis end = largest value plus headroom, rounded up to 100 (696 -> 800 on wide screens).
+    // A narrow plot needs more room for the value label after the longest bar.
+    const wide = useMediaQuery("(min-width: 640px)");
+    const headroom = wide ? 1.12 : 1.25;
+
     const handleInteraction = (events: InteractionEvent[]) => {
         for (const event of events) {
             if (event.action !== "select") continue;
@@ -116,7 +121,7 @@ export function PeerIntensityChart({ area, className, heightClassName, onSelectA
                 " gCO2 per kWh."
             }
             emptyMessage={`No carbon intensity data for ${area} or its peers.`}
-            adjustSpec={(spec, table) => withValueHeadroom(spec, table, "CarbonIntensity")}
+            adjustSpec={(spec, table) => withValueHeadroom(spec, table, "CarbonIntensity", headroom, 100)}
             className={className}
             heightClassName={heightClassName}
             onInteraction={handleInteraction}

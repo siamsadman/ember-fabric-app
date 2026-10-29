@@ -5,6 +5,7 @@ import { DEFAULT_AREA } from "@/queries";
 import { AreaPicker } from "./area-picker";
 import { KpiCards } from "./kpi-cards";
 import { LatestMixChart, MixOverTimeChart, PeerIntensityChart } from "./overview-charts";
+import { WatchlistCard } from "./watchlist/watchlist-card";
 
 export function OverviewPage() {
     const { isDark, toggleTheme } = useThemeContext();
@@ -40,15 +41,16 @@ export function OverviewPage() {
 
                 <main className="flex flex-col gap-grid">
                     <KpiCards area={area} />
-                    <div className="grid grid-cols-1 gap-grid lg:grid-cols-12">
-                        <MixOverTimeChart area={area} className="lg:col-span-8" heightClassName="h-104" />
-                        <LatestMixChart area={area} className="lg:col-span-4" heightClassName="h-104" />
+                    <div className="grid grid-cols-1 items-start gap-grid lg:grid-cols-12">
+                        <MixOverTimeChart area={area} className="lg:col-span-8" heightClassName="h-128 sm:h-112" />
+                        <LatestMixChart area={area} className="lg:col-span-4" heightClassName="h-112" />
                         <PeerIntensityChart
                             area={area}
-                            className="lg:col-span-12"
+                            className="lg:col-span-7"
                             heightClassName="h-80 sm:h-72"
                             onSelectArea={setArea}
                         />
+                        <WatchlistCard areaName={area} className="lg:col-span-5" />
                     </div>
                 </main>
 
